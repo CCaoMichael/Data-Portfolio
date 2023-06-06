@@ -1,0 +1,98 @@
+# App can be viewed at https://9a2vyo-michael-cao.shinyapps.io/nycflights13_analysis/
+
+library(shiny)
+library(nycflights13)
+library(ggplot2)
+
+# Define UI
+ui <- fluidPage(
+  titlePanel("NYC Flights 2013 Analysis"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("origin", "Select Origin:", choices = c("All", unique(flights$origin))),
+      sliderInput("hour", "Select Hour of Departure:", min = 0, max = 23, value = c(0, 23), step = 1),
+      checkboxGroupInput("days", "Select Days of the Week:", choices = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"), selected = c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")),
+      selectInput("carrier", "Select Carrier:", choices = c("All", unique(flights$carrier)))
+    ),
+    
+    mainPanel(
+      plotOutput("monthlyFlights"),
+      plotOutput("hourlyFlights"),
+      plotOutput("carrierFlights")
+    )
+  )
+)
+
+# Define server logic
+server <- function(input, output) {
+  output$monthlyFlights <- renderPlot({
+    filtered_flights <- flights
+    
+    if (input$origin != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$origin == input$origin, ]
+    }
+    
+    filtered_flights <- filtered_flights[filtered_flights$hour >= input$hour[1] & filtered_flights$hour <= input$hour[2], ]
+    
+    selected_days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    selected_days <- selected_days[selected_days %in% input$days]
+    filtered_flights <- filtered_flights[weekdays(as.Date(filtered_flights$time_hour)) %in% selected_days, ]
+    
+    if (input$carrier != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$carrier == input$carrier, ]
+    }
+    
+    ggplot(filtered_flights, aes(x = month)) +
+      geom_bar(stat = "count", fill = "steelblue") +
+      labs(title = "Monthly Flights", x = "Month", y = "Flights")
+  })
+  
+  output$hourlyFlights <- renderPlot({
+    filtered_flights <- flights
+    
+    if (input$origin != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$origin == input$origin, ]
+    }
+    
+    filtered_flights <- filtered_flights[filtered_flights$hour >= input$hour[1] & filtered_flights$hour <= input$hour[2], ]
+    
+    selected_days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    selected_days <- selected_days[selected_days %in% input$days]
+    filtered_flights <- filtered_flights[weekdays(as.Date(filtered_flights$time_hour, tz = "UTC")) %in% selected_days, ]
+    
+    if (input$carrier != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$carrier == input$carrier, ]
+    }
+    
+    ggplot(filtered_flights, aes(x = hour)) +
+      geom_bar(stat = "count", fill = "steelblue") +
+      labs(title = "Hourly Flights", x = "Hour", y = "Flights")
+  })
+  
+  output$carrierFlights <- renderPlot({
+    filtered_flights <- flights
+    
+    if (input$origin != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$origin == input$origin, ]
+    }
+    
+    filtered_flights <- filtered_flights[filtered_flights$hour >= input$hour[1] & filtered_flights$hour <= input$hour[2], ]
+    
+    selected_days <- c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday")
+    selected_days <- selected_days[selected_days %in% input$days]
+    filtered_flights <- filtered_flights[weekdays(as.Date(filtered_flights$time_hour, tz = "UTC")) %in% selected_days, ]
+    
+    if (input$carrier != "All") {
+      filtered_flights <- filtered_flights[filtered_flights$carrier == input$carrier, ]
+    }
+    
+    ggplot(filtered_flights, aes(x = carrier, fill = carrier)) +
+      geom_bar() +
+      labs(title = "Flights by Carrier", x = "Carrier", y = "Flights") +
+      theme(legend.position = "none")
+  })
+}
+
+# Run the application
+shinyApp(ui = ui, server = server)
