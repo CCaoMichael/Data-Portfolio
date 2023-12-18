@@ -11,3 +11,4 @@ First, we acquired two Zoom recordings from a professor lecturing on machine lea
 In acquiring the Whisper transcript, we used AWS Sagemaker. We first stored our Zoom mp3 files into an s3 bucket. An s3 bucket is a public cloud storage container for objects stored in a simple storage service (s3). Next, we used Python boto3 to access our mp3 files stored in s3 buckets to utilize OpenAI. Boto3 is the Python SDK for AWS that allows you to directly create, update, and delete AWS resources from your Python scripts. After this, we used the OpenAI machine learning model to transcribe our Zoom mp3 files. Lastly, we stored the Zoom and OpenAI Whisper text transcriptions in a transcription bucket. From here, we used Python to perform our comparison.
 
 # Reproduce
+To see how we've utilized AWS to store and retrieve the data, please see the `AWS Sagemaker and OpenAI Whisper` jupyter notebook. For the natural language processing comparison, see `NLP Comparative Analysis`.
