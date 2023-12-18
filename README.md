@@ -1,8 +1,8 @@
-# Data-Analyst-Portfolio
+# Data-Portfolio
 
-Welcome to my Data Analyst Portfolio!
+Welcome to my Data Analyst/Scientist Portfolio!
 
-I am a data science and computer science student with experience in using various tools and technologies to collect, organize, and analyze data for making business decisions. I am proficient in Python, R, SQL, Power BI, Excel, and Java.
+I am a data science and computer science student with experience in using various tools and technologies to collect, organize, and analyze data for making business decisions. I am proficient in AWS, Python, R, SQL, Power BI, Excel, and Java.
 
 In this portfolio, I have included a variety of projects that showcase my data analytics skills. You will find examples of dashboards and reports that I have created using Power BI and R. These projects demonstrate my ability to analyze and present data in a clear and visually appealing way, making it easy for decision-makers to understand the insights and take action.
 
